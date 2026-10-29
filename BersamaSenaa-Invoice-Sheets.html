@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BersamaSenaa ♡ Invoice Generator</title>
+<style>
+:root{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#493b43;background:#fff8fb}*{box-sizing:border-box}body{margin:0}.wrap{max-width:1120px;margin:auto;padding:32px 18px}header{text-align:center;margin-bottom:28px}header h1{font-family:Georgia,serif;color:#ba6489;margin:4px;font-size:34px}header p{color:#937b89}.layout{display:grid;grid-template-columns:1fr 1fr;gap:22px}.panel,.invoice{background:white;border:1px solid #f1dce6;border-radius:22px;box-shadow:0 10px 30px #b36d8b12;padding:25px}.panel h2{font-size:19px;margin:0 0 19px;color:#ae5d83}.field{margin-bottom:14px}label{display:block;font-size:13px;font-weight:650;margin-bottom:6px;color:#715663}input,select{width:100%;padding:12px;border:1px solid #e8d4df;border-radius:11px;font:inherit;color:#493b43;background:#fffafd}input:focus,select:focus{outline:2px solid #f3b5d1}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:12px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;background:#c66e99;color:white}button.secondary{background:#f9e7f0;color:#a4557a}.invoice{text-align:left}.invhead{text-align:center;border-bottom:1px dashed #ecc7d9;padding-bottom:20px}.ornament{color:#b86d92;letter-spacing:1px;font-weight:700;font-size:16px}.brand{font-family:Georgia,serif;font-size:25px;font-weight:bold;color:#ae5d83;margin:9px 0}.subtitle{font-size:12px;color:#9b7b8b}.section{margin-top:24px}.section h3{font-size:14px;color:#ad6185;margin-bottom:13px;letter-spacing:.4px}.line{display:flex;justify-content:space-between;gap:16px;margin:10px 0;font-size:13px}.line span:first-child{color:#866d7a}.line strong{text-align:right;overflow-wrap:anywhere}.total{border-top:1px dashed #eacbd9;padding-top:12px}.balance{background:#fff1f7;padding:12px;border-radius:12px}.status{text-align:center;color:#ac6186;font-weight:800;background:#fff0f6;padding:12px;border-radius:12px;letter-spacing:1px}.footer{text-align:center;margin-top:23px;font-size:13px;line-height:1.8;color:#9b6c83}.hint{font-size:12px;color:#967d89;line-height:1.6}.qr{display:block;max-width:155px;max-height:155px;object-fit:contain;margin:12px auto;border-radius:8px}.hidden{display:none!important}@media(max-width:760px){.layout{grid-template-columns:1fr}.wrap{padding:20px 12px}.panel,.invoice{padding:19px}}@media print{@page{size:A4;margin:17mm}body{background:white}.wrap{padding:0;max-width:100%}header,.panel,.print-hide{display:none!important}.layout{display:block}.invoice{box-shadow:none;border:none;padding:0;max-width:650px;margin:auto}.section{break-inside:avoid}.ornament{color:#b86d92!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body><div class="wrap"><header><div>୨୧ ‧₊˚ ♡ ˚₊‧ ୨୧</div><h1>BersamaSenaa</h1><p>Invoice Generator · Your Lombok Travel Companion ☁️</p></header><main class="layout"><section class="panel"><h2>🎀 Buat Invoice</h2><div class="field"><label for="number">Nomor invoice</label><input id="number" value="BS-001"></div><div class="field"><label for="name">Nama customer</label><input id="name" value="Kak Aulia"></div><div class="twocol"><div class="field"><label for="date">Tanggal trip</label><input type="date" id="date" value="2026-11-02"></div><div class="field"><label for="service">Layanan</label><select id="service"><option>Teman Jalan Lombok</option><option>Transportasi Lombok</option><option>Custom Trip</option></select></div></div><div class="twocol"><div class="field"><label for="total">Total biaya (Rp)</label><input id="total" type="number" min="0" value="400000"></div><div class="field"><label for="deposit">Deposit (Rp)</label><input id="deposit" type="number" min="0" value="100000"></div></div><div class="field"><label for="method">Metode pembayaran</label><select id="method"><option value="QRIS">QRIS</option><option value="Bank / E-Wallet">Bank / E-Wallet</option></select></div><div class="field" id="qrField"><label for="qrfile">Gambar QRIS (opsional)</label><input id="qrfile" type="file" accept="image/png,image/jpeg,image/webp"><p class="hint">Pilih gambar QRIS milik BersamaSenaa. Gambar hanya diproses di browser dan tidak diunggah ke server.</p></div><div class="field hidden" id="accountField"><label for="account">Detail Bank / E-Wallet</label><input id="account" placeholder="Contoh: BCA 123456789 a.n. ..."></div><div class="field"><label for="status">Status pembayaran</label><select id="status"><option value="AWAITING DEPOSIT">Awaiting Deposit</option><option value="PARTIALLY PAID">Partially Paid</option><option value="PAID">Paid</option></select></div><div class="field" style="border:1px solid #efd5e1;border-radius:12px;padding:14px;background:#fffafd"><label style="font-size:14px">🌷 Simpan ke Google Sheets</label><p class="hint">Isi URL Web App dan token dari pengaturan Apps Script. Data dikirim langsung ke spreadsheet, tanpa hosting website.</p><div class="field"><label for="sheetUrl">Web App URL (/exec)</label><input id="sheetUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off"></div><div class="field"><label for="sheetToken">INVOICE_TOKEN (jangan dibagikan)</label><input id="sheetToken" type="password" placeholder="Token dari Script Properties" autocomplete="off"></div><button type="button" id="saveSheet">💚 Simpan ke Google Sheets</button><p class="hint" id="sheetFeedback" role="status" aria-live="polite">Pastikan data pembayaran sudah benar sebelum menyimpan.</p></div><p id="warning" class="hint" role="status"></p><div class="actions"><button type="button" onclick="window.print()">🧾 Cetak / Simpan PDF</button><button type="button" id="pngDownload" class="secondary">🖼️ Download PNG</button><button type="button" id="jpgDownload" class="secondary">📷 Download JPG</button><button class="secondary" type="button" id="reset">↺ Reset Contoh</button></div><p class="hint">PNG/JPG langsung disimpan sebagai gambar invoice (tanpa form admin). PDF melalui “Save as PDF” di jendela cetak. Semuanya berjalan offline.</p></section><article class="invoice" id="invoice"><div class="invhead"><div class="ornament">୨୧ ‧₊˚ 𝗜𝗡𝗩𝗢𝗜𝗖𝗘 ˚₊‧ ୨୧</div><div class="brand">𐙚 BersamaSenaa ♡</div><div class="subtitle">Your Lombok Travel Companion</div></div><div class="section"><h3>꒰ 🧾 ꒱ INVOICE DETAILS</h3><div class="line"><span>୨୧ No. Invoice</span><strong id="vnumber"></strong></div><div class="line"><span>୨୧ Nama</span><strong id="vname"></strong></div><div class="line"><span>୨୧ Tanggal</span><strong id="vdate"></strong></div><div class="line"><span>୨୧ Layanan</span><strong id="vservice"></strong></div></div><div class="section"><h3>꒰ 💸 ꒱ PAYMENT DETAILS</h3><div class="line"><span>୨୧ Total biaya</span><strong id="vtotal"></strong></div><div class="line"><span>୨୧ Deposit</span><strong id="vdeposit"></strong></div><div class="line total balance"><span>୨୧ Sisa pembayaran</span><strong id="vbalance"></strong></div></div><div class="section"><h3>꒰ 💳 ꒱ PAYMENT METHOD</h3><div class="line"><span>୨୧ Metode</span><strong id="vmethod"></strong></div><div id="qrdetail" class="subtitle" style="text-align:center;margin-top:8px">Scan QRIS terlampir untuk pembayaran</div><img class="qr hidden" id="qrpreview" alt="QRIS BersamaSenaa"><div id="accountdetail" class="hint hidden"></div></div><div class="section"><h3>꒰ 🎀 ꒱ PAYMENT STATUS</h3><div class="status">♡ <span id="vstatus">AWAITING DEPOSIT</span> ♡</div></div><div class="footer"><div id="vmessage">Please complete your deposit to secure your booking! ♡</div><br>Thank you for choosing<br><b>𐙚 BersamaSenaa ♡</b><br>See you on your trip! ☁️🫶🏻</div></article></main></div><script>
+const $=id=>document.getElementById(id);const fields=['number','name','date','service','total','deposit','method','account','status'];const money=n=>'Rp'+n.toLocaleString('id-ID');function update(){const total=Math.max(0,Number($('total').value)||0),deposit=Math.max(0,Number($('deposit').value)||0),balance=Math.max(0,total-deposit);$('vnumber').textContent=$('number').value||'—';$('vname').textContent=$('name').value||'—';$('vdate').textContent=$('date').value?new Date($('date').value+'T12:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}):'—';$('vservice').textContent=$('service').value;$('vtotal').textContent=money(total);$('vdeposit').textContent=money(deposit);$('vbalance').textContent=money(balance);$('vmethod').textContent=$('method').value;$('vstatus').textContent=$('status').value;$('vmessage').textContent=$('status').value==='PAID'?'Your payment is complete. See you on your trip! ♡':$('status').value==='PARTIALLY PAID'?'Thank you for your deposit! Please complete the remaining payment. ♡':'Please complete your deposit to secure your booking! ♡';const qr=$('method').value==='QRIS';$('qrField').classList.toggle('hidden',!qr);$('accountField').classList.toggle('hidden',qr);$('qrdetail').classList.toggle('hidden',!qr);$('accountdetail').classList.toggle('hidden',qr);$('accountdetail').textContent=$('account').value||'Hubungi admin untuk detail pembayaran';$('qrpreview').classList.toggle('hidden',!qr||!$('qrpreview').getAttribute('src'));$('warning').textContent=deposit>total?'Perhatian: deposit lebih besar daripada total biaya. Periksa kembali nominal.':''}fields.forEach(id=>$(id).addEventListener('input',update));$('qrfile').addEventListener('change',e=>{const f=e.target.files[0];if(!f){$('qrpreview').removeAttribute('src');update();return}if(!['image/png','image/jpeg','image/webp'].includes(f.type)){alert('Pilih gambar PNG, JPG, atau WebP.');e.target.value='';return}const reader=new FileReader();reader.onload=()=>{$('qrpreview').src=reader.result;update()};reader.readAsDataURL(f)});$('reset').addEventListener('click',()=>{const defaults={number:'BS-001',name:'Kak Aulia',date:'2026-11-02',service:'Teman Jalan Lombok',total:'400000',deposit:'100000',method:'QRIS',account:'',status:'AWAITING DEPOSIT'};fields.forEach(id=>$(id).value=defaults[id]);$('qrfile').value='';$('qrpreview').removeAttribute('src');update()});update();
+</script><script>
+// Offline image export: draw invoice directly to a high-resolution canvas.
+function exportInvoice(type){
+ const canvas=document.createElement('canvas'),w=900,pad=65;
+ canvas.width=w;canvas.height=1650;
+ const c=canvas.getContext('2d');
+ c.fillStyle='#ffffff';c.fillRect(0,0,w,canvas.height);
+ let y=74;
+ const color='#493b43',muted='#866d7a',accent='#ad6185';
+ function txt(t,x,yy,size=23,bold=false,align='left',col=color){c.font=(bold?'700 ':'400 ')+size+'px system-ui, sans-serif';c.textAlign=align;c.fillStyle=col;c.fillText(String(t),x,yy)}
+ function rule(yy){c.strokeStyle='#edcbdc';c.setLineDash([6,7]);c.beginPath();c.moveTo(pad,yy);c.lineTo(w-pad,yy);c.stroke();c.setLineDash([])}
+ function section(title){y+=24;txt(title,pad,y,25,true,'left',accent);y+=37}
+ function wrap(str,maxWidth,fontSize=21,bold=false){c.font=(bold?'700 ':'400 ')+fontSize+'px system-ui, sans-serif';const words=String(str).split(/\s+/),lines=[];let line='';for(const word of words){const candidate=line?line+' '+word:word;if(c.measureText(candidate).width>maxWidth&&line){lines.push(line);line=word}else line=candidate}if(line)lines.push(line);return lines}
+ function line(label,value){const lines=wrap(value,395,22,true);txt('୨୧ '+label,pad,y,21,false,'left',muted);lines.forEach((t,i)=>txt(t,w-pad,y+i*30,22,true,'right'));y+=Math.max(48,lines.length*30+12)}
+ txt('୨୧ ‧₊˚ INVOICE ˚₊‧ ୨୧',w/2,y,30,true,'center',accent);y+=57;
+ txt('𐙚 BersamaSenaa ♡',w/2,y,42,true,'center',accent);y+=34;
+ txt('Your Lombok Travel Companion',w/2,y,19,false,'center',muted);y+=34;rule(y);y+=35;
+ section('꒰ 🧾 ꒱ INVOICE DETAILS');
+ line('No. Invoice',$('number').value||'—');line('Nama',$('name').value||'—');
+ line('Tanggal',$('vdate').textContent);line('Layanan',$('service').value);
+ section('꒰ 💸 ꒱ PAYMENT DETAILS');
+ line('Total biaya',$('vtotal').textContent);line('Deposit',$('vdeposit').textContent);
+ c.fillStyle='#fff1f7';c.fillRect(pad-10,y-30,w-2*pad+20,61);line('Sisa pembayaran',$('vbalance').textContent);
+ section('꒰ 💳 ꒱ PAYMENT METHOD');line('Metode',$('method').value);
+ if($('method').value==='QRIS'){
+  const qr=$('qrpreview');
+  if(qr.getAttribute('src')&&qr.complete&&qr.naturalWidth){const max=220,ratio=Math.min(max/qr.naturalWidth,max/qr.naturalHeight);const iw=qr.naturalWidth*ratio,ih=qr.naturalHeight*ratio;c.drawImage(qr,(w-iw)/2,y,iw,ih);y+=ih+20}
+  else {txt('Scan QRIS yang dikirim admin',w/2,y,19,false,'center',muted);y+=32}
+ }else{for(const t of wrap($('account').value||'Hubungi admin untuk detail pembayaran',w-2*pad,19)){txt(t,w/2,y,19,false,'center',muted);y+=29}}
+ section('꒰ 🎀 ꒱ PAYMENT STATUS');
+ c.fillStyle='#fff0f6';c.fillRect(pad,y-24,w-2*pad,64);txt('♡ '+$('status').value+' ♡',w/2,y+15,25,true,'center',accent);y+=88;
+ for(const t of wrap($('vmessage').textContent,w-2*pad,19)){txt(t,w/2,y,19,false,'center',muted);y+=29}
+ y+=20;txt('Thank you for choosing',w/2,y,20,false,'center',muted);y+=35;
+ txt('𐙚 BersamaSenaa ♡',w/2,y,26,true,'center',accent);y+=35;
+ txt('See you on your trip! ♡',w/2,y,20,false,'center',muted);y+=48;
+ const height=Math.max(800,Math.ceil(y+35));const out=document.createElement('canvas');out.width=w;out.height=height;const o=out.getContext('2d');o.fillStyle='#fff';o.fillRect(0,0,w,height);o.drawImage(canvas,0,0);
+ const mime=type==='jpg'?'image/jpeg':'image/png';const a=document.createElement('a');const filename=($('number').value||'invoice').replace(/[^a-zA-Z0-9_-]/g,'_');a.download='BersamaSenaa-'+filename+'.'+type;a.href=out.toDataURL(mime,0.94);document.body.appendChild(a);a.click();a.remove();
+}
+$('pngDownload').addEventListener('click',()=>exportInvoice('png'));
+$('jpgDownload').addEventListener('click',()=>exportInvoice('jpg'));
+</script><script>
+// POST through a hidden form avoids browser CORS restrictions for a local HTML file.
+// Apps Script does not provide a readable cross-origin acknowledgement in this setup.
+// Never claim success solely because the iframe loads.
+(function(){
+ const urlInput=$('sheetUrl'), tokenInput=$('sheetToken'), feedback=$('sheetFeedback'), button=$('saveSheet');
+ const storageKey='bersamasenaa_apps_script_url';
+ try { urlInput.value=localStorage.getItem(storageKey)||''; } catch (_) {}
+ urlInput.addEventListener('change',()=>{try{localStorage.setItem(storageKey,urlInput.value.trim())}catch(_){}});
+ let lastSignature='';
+ button.addEventListener('click',()=>{
+  const url=urlInput.value.trim(),token=tokenInput.value.trim();
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(url)) {feedback.textContent='⚠️ Masukkan URL Web App yang benar (berakhiran /exec).';return}
+  if(!token){feedback.textContent='⚠️ Masukkan INVOICE_TOKEN terlebih dahulu.';return}
+  const total=Number($('total').value),deposit=Number($('deposit').value);
+  if(!$('name').value.trim()||!$('date').value||!$('number').value.trim()||!Number.isFinite(total)||!Number.isFinite(deposit)||total<0||deposit<0||deposit>total){feedback.textContent='⚠️ Periksa nama, nomor invoice, tanggal, dan nominal. Deposit tidak boleh melebihi total.';return}
+  const data={token,noInvoice:$('number').value.trim(),tanggalInvoice:new Date().toLocaleDateString('en-CA'),nama:$('name').value.trim(),tanggalTrip:$('date').value,layanan:$('service').value,totalBiaya:total,deposit,metodePembayaran:$('method').value};
+  const signature=JSON.stringify(data);
+  if(signature===lastSignature&&!confirm('Data yang sama sudah pernah dikirim dari halaman ini. Kirim ulang? (Berpotensi membuat baris duplikat)'))return;
+  if(!confirm('Kirim invoice '+data.noInvoice+' untuk '+data.nama+' ke Google Sheets?'))return;
+  const frameName='sheet_post_'+Date.now();
+  const frame=document.createElement('iframe');frame.name=frameName;frame.style.display='none';frame.title='Pengiriman Google Sheets';document.body.appendChild(frame);
+  const form=document.createElement('form');form.method='POST';form.action=url;form.target=frameName;form.style.display='none';
+  const input=document.createElement('input');input.type='hidden';input.name='payload';input.value=JSON.stringify(data);form.appendChild(input);document.body.appendChild(form);
+  // NOTE: The deployed doPost must parse e.parameter.payload, not e.postData.contents.
+  // This is checked in the accompanying setup instructions.
+  feedback.textContent='⏳ Permintaan dikirim. Periksa baris baru di Google Sheets untuk memastikan tersimpan.';
+  lastSignature=signature;
+  try{form.submit()}catch(e){feedback.textContent='❌ Gagal mengirim: '+e.message;lastSignature=''}
+  setTimeout(()=>{form.remove();frame.remove()},20000);
+ });
+})();
+</script></body></html>
