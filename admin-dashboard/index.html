@@ -291,6 +291,23 @@ db.auth.onAuthStateChange((_event,session)=>{
   showApp(session);
 });
 db.auth.getSession().then(({data})=>showApp(data.session));
+async function deleteBooking(id){
+  const confirmDelete = confirm("Yakin ingin menghapus booking ini?");
+  if(!confirmDelete) return;
+
+  const {error} = await db
+    .from("bookings")
+    .delete()
+    .eq("id", id);
+
+  if(error){
+    alert("Gagal menghapus booking: " + error.message);
+    return;
+  }
+
+  alert("Booking berhasil dihapus ♡");
+  await loadBookings();
+}
 </script>
 </body>
 </html>
