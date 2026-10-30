@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BersamaSenaa Admin ♡</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff7fa;color:#624456;font-family:Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:850px;margin:auto;padding:22px 17px 90px}
+header{display:flex;justify-content:space-between;align-items:center;margin:12px 0 25px}
+.brand{color:#a65e82;font-size:23px;font-weight:bold}
+.small{color:#a78a9a;font-size:12px;margin-top:5px}
+.card{background:white;border:1px solid #f4e0e9;border-radius:17px;padding:17px;margin-bottom:15px;box-shadow:0 4px 16px #a76c8910}
+h2{font-size:19px;margin:0 0 15px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat{background:#fff0f5;border-radius:14px;padding:17px}
+.stat strong{display:block;font-size:25px;color:#a65e82;margin-top:8px}
+label{display:block;font-size:13px;margin:13px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ead5df;border-radius:10px;background:#fffafd;color:#624456}
+textarea{min-height:75px}
+.btn{border:0;border-radius:11px;padding:13px 17px;background:#b87999;color:white;font-weight:bold}
+.btn.secondary{background:#f7e6ee;color:#935b78}
+.btn.danger{background:#fff0f0;color:#b64c61}
+.full{width:100%;margin-top:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.booking{border:1px solid #f2dfe8;padding:14px;border-radius:13px;margin-top:11px}
+.badge{font-size:11px;padding:5px 9px;border-radius:20px;background:#f8e8ef;color:#a15e80}
+.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.actions button{font-size:12px;padding:9px 12px}
+.hidden{display:none!important}
+.muted{color:#a78a9a;font-size:12px}
+.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:15px}
+.tabs button{white-space:nowrap}
+#login{max-width:410px;margin:12vh auto;padding:22px}
+#login h1{color:#a65e82}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<section id="login" class="card">
+  <div style="text-align:center;font-size:34px">୨୧</div>
+  <h1 style="text-align:center">BersamaSenaa ♡</h1>
+  <p class="small" style="text-align:center">Your little business space</p>
+  <form id="loginForm">
+    <label>Email Admin</label>
+    <input id="email" type="email" required placeholder="Email admin">
+    <label>Password</label>
+    <input id="password" type="password" required placeholder="Password admin">
+    <button class="btn full">Login ♡</button>
+  </form>
+  <p id="loginMsg" class="muted"></p>
+</section>
+
+<main id="app" class="wrap hidden">
+<header>
+  <div>
+    <div class="brand">BersamaSenaa ♡</div>
+    <div class="small">Your little business space</div>
+  </div>
+  <button class="btn secondary" id="logout">Logout</button>
+</header>
+
+<div class="card">
+  <div class="small">WELCOME BACK, ADMIN 𐙚</div>
+  <h2 style="margin-top:8px">Booking Overview</h2>
+  <div class="stats">
+    <div class="stat">Total Booking<strong id="total">0</strong></div>
+    <div class="stat">Upcoming<strong id="upcoming">0</strong></div>
+    <div class="stat">Pending<strong id="pending">0</strong></div>
+    <div class="stat">Completed<strong id="completed">0</strong></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="btn" id="showBookings">Bookings</button>
+  <button class="btn secondary" id="showForm">+ Add Booking</button>
+</div>
+
+<section id="listSection" class="card">
+  <div class="row">
+    <h2>୨୧ Recent Bookings</h2>
+    <button class="btn secondary" id="refresh">Refresh</button>
+  </div>
+  <input id="search" placeholder="Cari nama customer...">
+  <div id="bookingList"><p class="muted">Memuat data...</p></div>
+</section>
+
+<section id="formSection" class="card hidden">
+  <h2 id="formTitle">Add New Booking ♡</h2>
+  <form id="bookingForm">
+    <label>Nama Customer</label>
+    <input id="customer_name" required>
+    <label>Nomor WhatsApp</label>
+    <input id="customer_phone" type="tel">
+    <label>Jenis Layanan</label>
+    <select id="service_type">
+      <option>Airport Transfer</option>
+      <option>Lombok Day Trip</option>
+      <option>Private Transport</option>
+      <option>Travel Companion</option>
+      <option>Custom Trip</option>
+    </select>
+    <label>Tanggal Perjalanan</label>
+    <input id="booking_date" type="date" required>
+    <label>Jam Penjemputan</label>
+    <input id="pickup_time" type="time">
+    <label>Lokasi Penjemputan</label>
+    <input id="pickup_location">
+    <label>Destinasi</label>
+    <textarea id="destination"></textarea>
+    <label>Total Harga (Rp)</label>
+    <input id="total_price" type="number" min="0" value="0">
+    <label>DP (Rp)</label>
+    <input id="down_payment" type="number" min="0" value="0">
+    <label>Status Booking</label>
+    <select id="booking_status">
+      <option value="pending">Pending</option>
+      <option value="confirmed">Confirmed</option>
+      <option value="completed">Completed</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+    <label>Catatan</label>
+    <textarea id="notes"></textarea>
+    <button class="btn full">Save Booking ♡</button>
+    <button type="button" class="btn secondary full" id="cancelForm">Cancel</button>
+  </form>
+</section>
+
+<div class="card">
+  <div class="small">PAYMENT SUMMARY ♡</div>
+  <h2 id="revenue">Rp0</h2>
+  <p class="muted">Total nilai pembayaran yang sudah diterima (DP)</p>
+</div>
+</main>
+
+<script>
+const SUPABASE_URL = "https://vuzypnimwlffsglxgoax.supabase.co
+";
+const SUPABASE_KEY = "sb_publishable_Kq9FPojytTzXNXZ_rjBGTw__tAk5jZw";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let editingId = null;
+let bookings = [];
+
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat("id-ID",{
+  style:"currency",currency:"IDR",maximumFractionDigits:0
+}).format(n || 0);
+
+function showApp(session){
+  $("login").classList.toggle("hidden",!!session);
+  $("app").classList.toggle("hidden",!session);
+  if(session) loadBookings();
+}
+
+async function loadBookings(){
+  $("bookingList").textContent="Memuat data...";
+  const {data,error}=await db.from("bookings")
+    .select("*").order("created_at",{ascending:false});
+  if(error){
+    $("bookingList").textContent="Gagal memuat: "+error.message;
+    return;
+  }
+  bookings=data||[];
+  $("total").textContent=bookings.length;
+  $("pending").textContent=bookings.filter(x=>x.booking_status==="pending").length;
+  $("completed").textContent=bookings.filter(x=>x.booking_status==="completed").length;
+  $("upcoming").textContent=bookings.filter(x=>
+    x.booking_date>=new Date().toLocaleDateString("en-CA") &&
+    ["pending","confirmed"].includes(x.booking_status)
+  ).length;
+  $("revenue").textContent=money(bookings.reduce((s,x)=>s+Number(x.down_payment||0),0));
+  renderBookings();
+}
+
+function renderBookings(){
+  const q=$("search").value.toLowerCase();
+  const list=bookings.filter(x=>(x.customer_name||"").toLowerCase().includes(q));
+  $("bookingList").replaceChildren();
+  if(!list.length){
+    $("bookingList").textContent="Belum ada booking ♡";
+    return;
+  }
+  list.forEach(x=>{
+    const card=document.createElement("div");
+    card.className="booking";
+    const top=document.createElement("div");
+    top.className="row";
+    const name=document.createElement("strong");
+    name.textContent=x.customer_name;
+    const badge=document.createElement("span");
+    badge.className="badge";
+    badge.textContent=x.booking_status;
+    top.append(name,badge);
+    const detail=document.createElement("p");
+    detail.className="muted";
+    detail.textContent=[x.service_type,x.booking_date,x.pickup_time].filter(Boolean).join(" · ");
+    const price=document.createElement("p");
+    price.textContent="Total: "+money(x.total_price)+" | DP: "+money(x.down_payment);
+    const actions=document.createElement("div");
+    actions.className="actions";
+    const edit=document.createElement("button");
+    edit.className="btn secondary";
+    edit.textContent="Edit";
+    edit.onclick=()=>editBooking(x);
+    const del=document.createElement("button");
+    del.className="btn danger";
+    del.textContent="Delete";
+    del.onclick=()=>deleteBooking(x.id);
+    actions.append(edit,del);
+    card.append(top,detail,price,actions);
+    $("bookingList").append(card);
+  });
+}
+
+function openForm(){
+  $("listSection").classList.add("hidden");
+  $("formSection").classList.remove("hidden");
+}
+function closeForm(){
+  $("formSection").classList.add("hidden");
+  $("listSection").classList.remove("hidden");
+  $("bookingForm").reset();
+  editingId=null;
+  $("formTitle").textContent="Add New Booking ♡";
+}
+function editBooking(x){
+  editingId=x.id;
+  ["customer_name","customer_phone","service_type","booking_date",
+   "pickup_time","pickup_location","destination","total_price",
+   "down_payment","booking_status","notes"].forEach(k=>{
+     $(k).value=x[k]??"";
+   });
+  $("formTitle").textContent="Edit Booking ♡";
+  openForm();
+}
+
+$("loginForm").onsubmit=async e=>{
+  e.preventDefault();
+  $("loginMsg").textContent="Checking login...";
+  const {error}=await db.auth.signInWithPassword({
+    email:$("email").value,password:$("password").value
+  });
+  $("loginMsg").textContent=error?error.message:"Login berhasil ♡";
+};
+$("logout").onclick=async()=>{await db.auth.signOut();};
+$("showBookings").onclick=closeForm;
+$("showForm").onclick=()=>{
+  closeForm();
+  $("listSection").classList.add("hidden");
+  $("formSection").classList.remove("hidden");
+};
+$("cancelForm").onclick=closeForm;
+$("refresh").onclick=loadBookings;
+$("search").oninput=renderBookings;
+
+$("bookingForm").onsubmit=async e=>{
+  e.preventDefault();
+  const fields=["customer_name","customer_phone","service_type",
+    "booking_date","pickup_time","pickup_location","destination",
+    "total_price","down_payment","booking_status","notes"];
+  const payload={};
+  fields.forEach(k=>{
+    const el=$(k);
+    payload[k]=el.type==="number"?(Number(el.value)||0):(el.value||null);
+  });
+  if(Number(payload.down_payment)>Number(payload.total_price)){
+    alert("DP tidak boleh lebih besar dari total harga.");
+    return;
+  }
+  const result=editingId
+    ?await db.from("bookings").update(payload).eq("id",editingId)
+    :await db.from("bookings").insert(payload);
+  if(result.error){
+    alert("Gagal menyimpan: "+result.error.message);
+    return;
+  }
+  alert("Booking berhasil disimpan ♡");
+  closeForm();
+  loadBookings();
+};
+
+$("bookingForm").querySelector("button[type=submit]");
+
+db.auth.onAuthStateChange((_event,session)=>{
+  showApp(session);
+});
+db.auth.getSession().then(({data})=>showApp(data.session));
+</script>
+</body>
+</html>
+
