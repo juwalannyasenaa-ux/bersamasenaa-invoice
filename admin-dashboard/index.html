@@ -118,6 +118,11 @@ textarea{min-height:75px}
     <input id="total_price" type="number" min="0" value="0">
     <label>DP (Rp)</label>
     <input id="down_payment" type="number" min="0" value="0">
+
+    
+<label>💳 Pelunasan (Rp)</label>
+<input id="final_payment" type="number" min="0" value="0">
+
     <label>Status Booking</label>
     <select id="booking_status">
       <option value="pending">Pending</option>
@@ -250,16 +255,18 @@ function closeForm(){
   editingId=null;
   $("formTitle").textContent="Add New Booking ♡";
 }
+
 function editBooking(x){
   editingId=x.id;
   ["customer_name","customer_phone","service_type","booking_date",
    "pickup_time","pickup_location","destination","total_price",
-   "down_payment","booking_status","notes"].forEach(k=>{
+   "down_payment","final_payment","booking_status","notes"].forEach(k=>{
      $(k).value=x[k]??"";
    });
   $("formTitle").textContent="Edit Booking ♡";
   openForm();
 }
+
 
 $("loginForm").onsubmit=async e=>{
   e.preventDefault();
@@ -282,18 +289,26 @@ $("search").oninput=renderBookings;
 
 $("bookingForm").onsubmit=async e=>{
   e.preventDefault();
-  const fields=["customer_name","customer_phone","service_type",
-    "booking_date","pickup_time","pickup_location","destination",
-    "total_price","down_payment","booking_status","notes"];
+ 
+const fields=["customer_name","customer_phone","service_type",
+  "booking_date","pickup_time","pickup_location","destination",
+  "total_price","down_payment","final_payment","booking_status","notes"];
+
   const payload={};
   fields.forEach(k=>{
     const el=$(k);
     payload[k]=el.type==="number"?(Number(el.value)||0):(el.value||null);
   });
-  if(Number(payload.down_payment)>Number(payload.total_price)){
-    alert("DP tidak boleh lebih besar dari total harga.");
-    return;
-  }
+  
+if(
+  Number(payload.down_payment || 0) +
+  Number(payload.final_payment || 0) >
+  Number(payload.total_price || 0)
+){
+  alert("Total DP dan pelunasan tidak boleh melebihi total harga.");
+  return;
+}
+
   const result=editingId
     ?await db.from("bookings").update(payload).eq("id",editingId)
     :await db.from("bookings").insert(payload);
