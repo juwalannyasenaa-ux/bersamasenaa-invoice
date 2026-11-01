@@ -200,8 +200,29 @@ function renderBookings(){
     const detail=document.createElement("p");
     detail.className="muted";
     detail.textContent=[x.service_type,x.booking_date,x.pickup_time].filter(Boolean).join(" · ");
-    const price=document.createElement("p");
-    price.textContent="Total: "+money(x.total_price)+" | DP: "+money(x.down_payment);
+    
+const price=document.createElement("p");
+
+const total=Number(x.total_price)||0;
+const dp=Number(x.down_payment)||0;
+const pelunasan=Number(x.final_payment)||0;
+const sisa=Math.max(0,total-dp-pelunasan);
+
+const statusPembayaran=
+  sisa===0 ? "PAID ♡" :
+  dp+pelunasan>0 ? "PARTIAL PAYMENT" :
+  "UNPAID";
+
+price.style.lineHeight="1.9";
+price.textContent=
+  "💰 Total: "+money(total)+"\n"+
+  "💗 DP: "+money(dp)+"\n"+
+  "💳 Pelunasan: "+money(pelunasan)+"\n"+
+  "🧾 Sisa: "+money(sisa)+"\n"+
+  "✨ Status: "+statusPembayaran;
+
+price.style.whiteSpace="pre-line";
+
     const actions=document.createElement("div");
     actions.className="actions";
     const edit=document.createElement("button");
