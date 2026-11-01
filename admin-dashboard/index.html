@@ -15,6 +15,17 @@ h2{font-size:20px;margin:0 0 15px}.small,.muted{color:var(--muted);font-size:12p
 @media(min-width:1050px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.sidebar{transform:translateX(-100%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.backdrop.open{display:block;position:fixed;inset:0;background:#42283970;z-index:19}.main-area{margin-left:0;padding:17px 15px 70px}.mobile-menu{display:inline-flex;background:#f7e6ee;color:#935b78;border:0;border-radius:10px;padding:10px 13px;font-size:20px}.topbar h1{font-size:20px}.topbar{margin-bottom:18px}.desktop-bookings{display:none}.mobile-bookings{display:block}.card{padding:15px}.stat{padding:12px}.stat strong{font-size:21px}}
 .calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:16px}.calendar-toolbar h2{margin:0}.calendar-controls{display:flex;gap:7px}.calendar-controls button{padding:9px 12px}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.weekday{text-align:center;font-size:12px;color:#9b7289;padding:8px 0;font-weight:bold}.calendar-day{border:1px solid var(--line);border-radius:10px;min-height:88px;padding:8px;background:white;text-align:left;color:var(--deep);font-weight:600;display:flex;flex-direction:column;gap:6px;min-width:0}.calendar-day:hover{background:#fff0f5}.calendar-day.selected{border:2px solid var(--pink);background:#fff0f5}.calendar-day.today .day-num{background:var(--pink);color:white;border-radius:999px;padding:3px 7px}.calendar-day.outside{opacity:.35}.day-num{align-self:flex-start;font-size:12px}.day-count{font-size:11px;color:#9d6281;background:#f9e6f0;border-radius:8px;padding:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}.calendar-trips{margin-top:17px}.trip-entry{padding:12px 0;border-bottom:1px solid var(--line)}.trip-entry:last-child{border-bottom:0}.trip-entry strong{display:block;margin-bottom:5px}.trip-entry .mini{line-height:1.7}@media(max-width:650px){.calendar-day{min-height:61px;padding:5px;gap:3px}.calendar-grid{gap:3px}.day-count{font-size:10px;padding:3px}.weekday{font-size:10px}.calendar-toolbar h2{font-size:17px}}
+
+.customer-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:15px}
+.customer-summary .stat strong{font-size:23px}
+.customer-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
+.customer-card{border:1px solid var(--line);border-radius:14px;padding:17px;background:#fff}
+.customer-card h3{margin:0 0 6px;font-size:16px;color:#8d5273}
+.customer-card .mini{line-height:1.7}
+.customer-history{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.customer-trip{padding:9px 0;border-bottom:1px solid #f7eaf0;font-size:12px;line-height:1.6}
+.customer-card .actions a{text-decoration:none;display:inline-block}
+@media(max-width:700px){.customer-list{grid-template-columns:1fr}.customer-summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -52,7 +63,20 @@ h2{font-size:20px;margin:0 0 15px}.small,.muted{color:var(--muted);font-size:12p
    <section id="formSection" class="card hidden"><h2 id="formTitle">Add New Booking ♡</h2><form id="bookingForm"><label for="customer_name">Nama Customer</label><input id="customer_name" required><label for="customer_phone">Nomor WhatsApp</label><input id="customer_phone" type="tel"><label for="service_type">Jenis Layanan</label><select id="service_type"><option>Airport Transfer</option><option>Lombok Day Trip</option><option>Private Transport</option><option>Travel Companion</option><option>Custom Trip</option></select><label for="booking_date">Tanggal Perjalanan</label><input id="booking_date" type="date" required><label for="pickup_time">Jam Penjemputan</label><input id="pickup_time" type="time"><label for="pickup_location">Lokasi Penjemputan</label><input id="pickup_location"><label for="destination">Destinasi</label><textarea id="destination"></textarea><label for="total_price">Total Harga (Rp)</label><input id="total_price" type="number" min="0" value="0"><label for="down_payment">DP (Rp)</label><input id="down_payment" type="number" min="0" value="0"><label for="final_payment">💳 Pelunasan (Rp)</label><input id="final_payment" type="number" min="0" value="0"><label for="booking_status">Status Booking</label><select id="booking_status"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><label for="notes">Catatan</label><textarea id="notes"></textarea><button class="btn full" type="submit">Save Booking ♡</button><button type="button" class="btn secondary full" id="cancelForm">Cancel</button></form></section>
   </section>
   <section id="calendarPage" class="page hidden"><div class="card"><div class="small">TRIP SCHEDULE ♡</div><div class="calendar-toolbar"><h2 id="calendarMonth">Trip Calendar ♡</h2><div class="calendar-controls"><button class="btn secondary" id="calPrev" aria-label="Bulan sebelumnya">‹</button><button class="btn secondary" id="calToday">Hari ini</button><button class="btn secondary" id="calNext" aria-label="Bulan berikutnya">›</button></div></div><div id="calendarGrid" class="calendar-grid" aria-label="Kalender jadwal perjalanan"></div><div class="calendar-trips"><h2 id="calendarSelectedTitle">Jadwal Trip</h2><div id="calendarDayTrips" aria-live="polite"></div></div></div></section>
-  <section id="customersPage" class="page hidden"><div class="card"><h2>Customer Database ♡</h2><p class="note">Profil dan riwayat customer akan ditambahkan setelah navigasi diuji.</p></div></section>
+  <section id="customersPage" class="page hidden">
+  <div class="card">
+    <div class="small">CUSTOMER RELATIONSHIP ♡</div>
+    <h2 style="margin-top:7px">Customer Database</h2>
+    <p class="muted">Otomatis dari data booking. Customer dengan nomor WhatsApp sama digabung; jika tidak ada nomor, berdasarkan nama.</p>
+    <div class="customer-summary">
+      <div class="stat">Total Customer<strong id="customerTotal">0</strong></div>
+      <div class="stat">Repeat Customer<strong id="customerRepeat">0</strong></div>
+      <div class="stat">Total Booking<strong id="customerBookingTotal">0</strong></div>
+    </div>
+    <input id="customerSearch" placeholder="Cari nama atau nomor WhatsApp..." aria-label="Cari customer">
+    <div id="customerList" class="customer-list" aria-live="polite"></div>
+  </div>
+</section>
   <section id="paymentsPage" class="page hidden"><div class="card"><h2>Payment History ♡</h2><p class="note">Riwayat transaksi terpisah akan ditambahkan pada tahap berikutnya. Ringkasan DP dan pelunasan saat ini ada di Dashboard dan Bookings.</p></div></section>
   <section id="expensesPage" class="page hidden"><div class="card"><h2>Expenses ♡</h2><p class="note">Pencatatan pengeluaran per booking akan ditambahkan pada tahap berikutnya.</p></div></section>
   <section id="reportsPage" class="page hidden"><div class="card"><h2>Monthly Reports ♡</h2><p class="note">Laporan bulanan dan profit akan ditambahkan setelah data pengeluaran tersedia.</p></div></section>
@@ -68,11 +92,11 @@ const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
 const pageNames={dashboard:"Dashboard ♡",bookings:"Bookings ♡",calendar:"Trip Calendar ♡",customers:"Customers ♡",payments:"Payments ♡",expenses:"Expenses ♡",reports:"Monthly Reports ♡",master:"Master Data ♡"};
 function closeMenu(){$("sidebar").classList.remove("open");$("backdrop").classList.remove("open");$("menuToggle").setAttribute("aria-expanded","false")}
-function navigate(page){document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));$(page+"Page").classList.remove("hidden");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));$("pageTitle").textContent=pageNames[page];closeMenu();if(page==="bookings")closeForm();if(page==="calendar")renderCalendar()}
+function navigate(page){document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));$(page+"Page").classList.remove("hidden");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));$("pageTitle").textContent=pageNames[page];closeMenu();if(page==="bookings")closeForm();if(page==="calendar")renderCalendar();if(page==="customers")renderCustomers()}
 document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
 $("menuToggle").onclick=()=>{const open=!$("sidebar").classList.contains("open");$("sidebar").classList.toggle("open",open);$("backdrop").classList.toggle("open",open);$("menuToggle").setAttribute("aria-expanded",String(open))};$("backdrop").onclick=closeMenu;
 function showApp(session){$("login").classList.toggle("hidden",!!session);$("app").classList.toggle("hidden",!session);if(session)loadBookings()}
-async function loadBookings(){ $("bookingList").textContent="Memuat data...";const {data,error}=await db.from("bookings").select("*").order("created_at",{ascending:false});if(error){$("bookingList").textContent="Gagal memuat: "+error.message;return}bookings=data||[];const today=new Date();const localToday=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");$("total").textContent=bookings.length;$("pending").textContent=bookings.filter(x=>x.booking_status==="pending").length;$("completed").textContent=bookings.filter(x=>x.booking_status==="completed").length;$("upcoming").textContent=bookings.filter(x=>x.booking_date>=localToday&&["pending","confirmed"].includes(x.booking_status)).length;const total=bookings.reduce((s,x)=>s+Number(x.total_price||0),0);const received=bookings.reduce((s,x)=>s+Number(x.down_payment||0)+Number(x.final_payment||0),0);$("turnover").textContent=money(total);$("revenue").textContent=money(received);$("balance").textContent=money(Math.max(0,total-received));$("paidCount").textContent=bookings.filter(x=>Number(x.total_price||0)>0&&Number(x.down_payment||0)+Number(x.final_payment||0)>=Number(x.total_price||0)).length;renderBookings();renderCalendar()}
+async function loadBookings(){ $("bookingList").textContent="Memuat data...";const {data,error}=await db.from("bookings").select("*").order("created_at",{ascending:false});if(error){$("bookingList").textContent="Gagal memuat: "+error.message;return}bookings=data||[];const today=new Date();const localToday=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");$("total").textContent=bookings.length;$("pending").textContent=bookings.filter(x=>x.booking_status==="pending").length;$("completed").textContent=bookings.filter(x=>x.booking_status==="completed").length;$("upcoming").textContent=bookings.filter(x=>x.booking_date>=localToday&&["pending","confirmed"].includes(x.booking_status)).length;const total=bookings.reduce((s,x)=>s+Number(x.total_price||0),0);const received=bookings.reduce((s,x)=>s+Number(x.down_payment||0)+Number(x.final_payment||0),0);$("turnover").textContent=money(total);$("revenue").textContent=money(received);$("balance").textContent=money(Math.max(0,total-received));$("paidCount").textContent=bookings.filter(x=>Number(x.total_price||0)>0&&Number(x.down_payment||0)+Number(x.final_payment||0)>=Number(x.total_price||0)).length;renderBookings();renderCalendar();renderCustomers()}
 
 // Kalender menggunakan booking_date dari tabel bookings yang sudah tersedia.
 const calNow=new Date();
@@ -111,6 +135,53 @@ $("calToday").onclick=()=>{const d=new Date();calendarYear=d.getFullYear();calen
 
 function paymentStatus(x){const total=Number(x.total_price)||0,paid=(Number(x.down_payment)||0)+(Number(x.final_payment)||0);return total>0&&paid>=total?"PAID ♡":paid>0?"PARTIAL PAYMENT":"UNPAID"}
 function makeAction(label,cls,handler){const b=document.createElement("button");b.className="btn "+cls;b.textContent=label;b.onclick=handler;return b}
+function renderCustomers(){
+ const target=$("customerList");if(!target)return;
+ const groups=new Map();
+ bookings.forEach(b=>{
+   const name=String(b.customer_name||"").trim()||"Tanpa Nama";
+   const raw=String(b.customer_phone||"").trim();
+   const digits=raw.replace(/\\D/g,"");
+   const normalized=digits.startsWith("0")?"62"+digits.slice(1):digits.startsWith("8")?"62"+digits:digits;
+   const key=normalized?"phone:"+normalized:"name:"+name.toLocaleLowerCase("id-ID");
+   if(!groups.has(key))groups.set(key,{name,phone:raw,wa:normalized,items:[]});
+   const g=groups.get(key);g.items.push(b);
+   if(!g.phone&&raw){g.phone=raw;g.wa=normalized}
+ });
+ const all=[...groups.values()].sort((a,b)=>a.name.localeCompare(b.name,"id"));
+ $("customerTotal").textContent=all.length;
+ $("customerRepeat").textContent=all.filter(g=>g.items.length>1).length;
+ $("customerBookingTotal").textContent=bookings.length;
+ const q=String($("customerSearch").value||"").trim().toLowerCase();
+ const filtered=all.filter(g=>(g.name+" "+g.phone).toLowerCase().includes(q));
+ target.replaceChildren();
+ if(!filtered.length){const p=document.createElement("p");p.className="muted";p.textContent="Customer tidak ditemukan ♡";target.append(p);return}
+ filtered.forEach(g=>{
+   const card=document.createElement("article");card.className="customer-card";
+   const title=document.createElement("h3");title.textContent=g.name;
+   const info=document.createElement("div");info.className="mini";
+   const total=g.items.reduce((v,b)=>v+Number(b.total_price||0),0);
+   const received=g.items.reduce((v,b)=>v+Number(b.down_payment||0)+Number(b.final_payment||0),0);
+   info.textContent=(g.phone||"Nomor WhatsApp belum tersedia")+" · "+g.items.length+" booking"+(g.items.length>1?" · Repeat Customer ♡":"");
+   const financial=document.createElement("p");financial.className="mini";financial.textContent="Total transaksi: "+money(total)+" · Diterima: "+money(received);
+   const actions=document.createElement("div");actions.className="actions";
+   if(g.wa&&/^62\\d{8,13}$/.test(g.wa)){
+     const a=document.createElement("a");a.className="btn secondary";a.textContent="WhatsApp";a.href="https://wa.me/"+g.wa;a.target="_blank";a.rel="noopener noreferrer";actions.append(a);
+   }
+   const toggle=makeAction("Lihat Riwayat","secondary",()=>{history.classList.toggle("hidden");toggle.textContent=history.classList.contains("hidden")?"Lihat Riwayat":"Tutup Riwayat"});
+   actions.append(toggle);
+   const history=document.createElement("div");history.className="customer-history hidden";
+   g.items.slice().sort((a,b)=>String(b.booking_date||"").localeCompare(String(a.booking_date||""))).forEach(b=>{
+     const line=document.createElement("div");line.className="customer-trip";
+     const label=document.createElement("div");label.textContent=[b.booking_date||"Tanpa tanggal",b.service_type||"Layanan",b.booking_status||"-"].join(" · ");
+     const amount=document.createElement("div");amount.textContent="Total: "+money(b.total_price)+" · "+paymentStatus(b);
+     const edit=makeAction("Lihat / Edit Booking","secondary",()=>editBooking(b));
+     line.append(label,amount,edit);history.append(line);
+   });
+   card.append(title,info,financial,actions,history);target.append(card);
+ });
+}
+$("customerSearch").addEventListener("input",renderCustomers);
 function renderBookings(){const q=$("search").value.trim().toLowerCase();const list=bookings.filter(x=>[x.customer_name,x.service_type,x.booking_date].some(v=>String(v||"").toLowerCase().includes(q)));$("bookingList").replaceChildren();if(!list.length){$("bookingList").textContent="Belum ada booking yang cocok ♡";return}
 const desktop=document.createElement("div");desktop.className="desktop-bookings table-wrap";const table=document.createElement("table");table.className="booking-table";const head=document.createElement("thead");const hr=document.createElement("tr");["Customer / Trip","Total","Pembayaran","Status","Action"].forEach(s=>{const th=document.createElement("th");th.textContent=s;hr.append(th)});head.append(hr);table.append(head);const tbody=document.createElement("tbody");const mobile=document.createElement("div");mobile.className="mobile-bookings";
 list.forEach(x=>{const total=Number(x.total_price)||0,dp=Number(x.down_payment)||0,final=Number(x.final_payment)||0,balance=Math.max(0,total-dp-final);const tr=document.createElement("tr");const cells=[`${x.customer_name||"-"}\n${[x.service_type,x.booking_date].filter(Boolean).join(" · ")}`,money(total),`DP ${money(dp)}\nPelunasan ${money(final)}\nSisa ${money(balance)}`,`${x.booking_status||"-"} · ${paymentStatus(x)}`];cells.forEach((v,i)=>{const td=document.createElement("td");td.textContent=v;td.style.whiteSpace="pre-line";if(i===0)td.style.fontWeight="600";tr.append(td)});const act=document.createElement("td");const buttons=document.createElement("div");buttons.className="actions";buttons.append(makeAction("Edit","secondary",()=>editBooking(x)),makeAction("Delete","danger",()=>deleteBooking(x.id)));act.append(buttons);tr.append(act);tbody.append(tr);
