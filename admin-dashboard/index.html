@@ -1,350 +1,91 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BersamaSenaa Admin ♡</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#fff7fa;color:#624456;font-family:Arial,sans-serif}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.wrap{max-width:850px;margin:auto;padding:22px 17px 90px}
-header{display:flex;justify-content:space-between;align-items:center;margin:12px 0 25px}
-.brand{color:#a65e82;font-size:23px;font-weight:bold}
-.small{color:#a78a9a;font-size:12px;margin-top:5px}
-.card{background:white;border:1px solid #f4e0e9;border-radius:17px;padding:17px;margin-bottom:15px;box-shadow:0 4px 16px #a76c8910}
-h2{font-size:19px;margin:0 0 15px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.stat{background:#fff0f5;border-radius:14px;padding:17px}
-.stat strong{display:block;font-size:25px;color:#a65e82;margin-top:8px}
-label{display:block;font-size:13px;margin:13px 0 6px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #ead5df;border-radius:10px;background:#fffafd;color:#624456}
-textarea{min-height:75px}
-.btn{border:0;border-radius:11px;padding:13px 17px;background:#b87999;color:white;font-weight:bold}
-.btn.secondary{background:#f7e6ee;color:#935b78}
-.btn.danger{background:#fff0f0;color:#b64c61}
-.full{width:100%;margin-top:14px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.booking{border:1px solid #f2dfe8;padding:14px;border-radius:13px;margin-top:11px}
-.badge{font-size:11px;padding:5px 9px;border-radius:20px;background:#f8e8ef;color:#a15e80}
-.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.actions button{font-size:12px;padding:9px 12px}
-.hidden{display:none!important}
-.muted{color:#a78a9a;font-size:12px}
-.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:15px}
-.tabs button{white-space:nowrap}
-#login{max-width:410px;margin:12vh auto;padding:22px}
-#login h1{color:#a65e82}
-@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+:root{--bg:#fff7fa;--sidebar:#f7e7ef;--pink:#b87999;--deep:#624456;--muted:#a78a9a;--line:#f0dce5;--soft:#fff0f5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--deep);font-family:Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:16px;box-shadow:0 4px 16px #a76c8910}
+h2{font-size:20px;margin:0 0 15px}.small,.muted{color:var(--muted);font-size:12px}.small{margin-top:5px}.brand{color:#a65e82;font-size:21px;font-weight:700}.btn{border:0;border-radius:11px;padding:12px 15px;background:var(--pink);color:#fff;font-weight:bold}.btn.secondary{background:#f7e6ee;color:#935b78}.btn.danger{background:#fff0f0;color:#b64c61}.btn.full{width:100%;margin-top:14px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}label{display:block;font-size:13px;margin:13px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #ead5df;border-radius:10px;background:#fffafd;color:var(--deep)}textarea{min-height:75px}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stat{background:var(--soft);border-radius:14px;padding:16px;font-size:13px}.stat strong{display:block;font-size:24px;color:#a65e82;margin-top:8px;overflow-wrap:anywhere}.badge{font-size:11px;padding:5px 9px;border-radius:20px;background:#f8e8ef;color:#a15e80}.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.actions button{font-size:12px;padding:9px 12px}.booking{border:1px solid var(--line);padding:14px;border-radius:13px;margin-top:11px}.booking p{line-height:1.7}
+#login{max-width:410px;margin:12vh auto;padding:22px}#login h1{color:#a65e82}
+#app{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:232px;background:var(--sidebar);border-right:1px solid var(--line);padding:27px 15px;z-index:20;overflow:auto}.side-heading{padding:0 10px 25px}.nav-btn{width:100%;border:0;background:transparent;color:#79566a;display:flex;align-items:center;gap:10px;text-align:left;padding:13px 12px;margin:3px 0;border-radius:11px;font-weight:600;font-size:13px}.nav-btn.active{background:var(--pink);color:white}.nav-btn:hover:not(.active){background:#fceff5}.nav-icon{width:22px;text-align:center}.main-area{margin-left:232px;max-width:1250px;padding:25px 28px 80px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:25px}.topbar h1{font-size:24px;margin:0}.mobile-menu{display:none}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}.section-heading h2{margin:0}.booking-grid{display:grid;grid-template-columns:1fr;gap:10px}.payment-line{white-space:pre-line}.backdrop{display:none}.note{background:#fff0f5;padding:13px;border-radius:11px;color:#946c83;font-size:13px}.table-wrap{overflow:auto}.booking-table{border-collapse:collapse;width:100%;font-size:13px}.booking-table th,.booking-table td{padding:13px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.booking-table th{color:#a0768d;font-size:12px}.booking-table .actions{margin:0}.booking-table .actions button{white-space:nowrap}.mobile-bookings{display:none}.mini{font-size:12px;color:var(--muted)}.pill{display:inline-block;border-radius:999px;padding:5px 9px;background:#f9e9f1;color:#9e5e81;font-size:11px}
+@media(min-width:1050px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.backdrop.open{display:block;position:fixed;inset:0;background:#42283970;z-index:19}.main-area{margin-left:0;padding:17px 15px 70px}.mobile-menu{display:inline-flex;background:#f7e6ee;color:#935b78;border:0;border-radius:10px;padding:10px 13px;font-size:20px}.topbar h1{font-size:20px}.topbar{margin-bottom:18px}.desktop-bookings{display:none}.mobile-bookings{display:block}.card{padding:15px}.stat{padding:12px}.stat strong{font-size:21px}}
 </style>
 </head>
 <body>
-
 <section id="login" class="card">
-  <div style="text-align:center;font-size:34px">୨୧</div>
-  <h1 style="text-align:center">BersamaSenaa ♡</h1>
-  <p class="small" style="text-align:center">Your little business space</p>
-  <form id="loginForm">
-    <label>Email Admin</label>
-    <input id="email" type="email" required placeholder="Email admin">
-    <label>Password</label>
-    <input id="password" type="password" required placeholder="Password admin">
-    <button class="btn full">Login ♡</button>
-  </form>
-  <p id="loginMsg" class="muted"></p>
+ <div style="text-align:center;font-size:34px">୨୧</div><h1 style="text-align:center">BersamaSenaa ♡</h1>
+ <p class="small" style="text-align:center">Your little business space</p>
+ <form id="loginForm"><label for="email">Email Admin</label><input id="email" type="email" autocomplete="username" required placeholder="Email admin"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required placeholder="Password admin"><button class="btn full" type="submit">Login ♡</button></form>
+ <p id="loginMsg" class="muted" role="status"></p>
 </section>
-
-<main id="app" class="wrap hidden">
-<header>
-  <div>
-    <div class="brand">BersamaSenaa ♡</div>
-    <div class="small">Your little business space</div>
-  </div>
-  <button class="btn secondary" id="logout">Logout</button>
-</header>
-
-<div class="card">
-  <div class="small">WELCOME BACK, ADMIN 𐙚</div>
-  <h2 style="margin-top:8px">Booking Overview</h2>
-  <div class="stats">
-    <div class="stat">Total Booking<strong id="total">0</strong></div>
-    <div class="stat">Upcoming<strong id="upcoming">0</strong></div>
-    <div class="stat">Pending<strong id="pending">0</strong></div>
-    <div class="stat">Completed<strong id="completed">0</strong></div>
-  </div>
+<div id="app" class="hidden">
+ <div id="backdrop" class="backdrop"></div>
+ <aside id="sidebar" class="sidebar" aria-label="Navigasi admin">
+  <div class="side-heading"><div class="brand">BersamaSenaa ♡</div><div class="small">ADMIN WORKSPACE</div></div>
+  <nav>
+   <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span> Dashboard</button>
+   <button class="nav-btn" data-page="bookings"><span class="nav-icon">▦</span> Bookings</button>
+   <button class="nav-btn" data-page="calendar"><span class="nav-icon">▣</span> Trip Calendar</button>
+   <button class="nav-btn" data-page="customers"><span class="nav-icon">♡</span> Customers</button>
+   <button class="nav-btn" data-page="payments"><span class="nav-icon">▤</span> Payments</button>
+   <button class="nav-btn" data-page="expenses"><span class="nav-icon">▧</span> Expenses</button>
+   <button class="nav-btn" data-page="reports"><span class="nav-icon">◫</span> Monthly Reports</button>
+   <button class="nav-btn" data-page="master"><span class="nav-icon">⚙</span> Master Data</button>
+  </nav>
+ </aside>
+ <main class="main-area">
+  <header class="topbar"><div class="row"><button id="menuToggle" class="mobile-menu" aria-label="Buka menu" aria-expanded="false">☰</button><div><h1 id="pageTitle">Dashboard ♡</h1><div class="small">Your little business space</div></div></div><button class="btn secondary" id="logout">Logout</button></header>
+  <section id="dashboardPage" class="page">
+   <div class="card"><div class="small">WELCOME BACK, ADMIN 𐙚</div><h2 style="margin-top:8px">Booking Overview</h2><div class="stats"><div class="stat">Total Booking<strong id="total">0</strong></div><div class="stat">Upcoming<strong id="upcoming">0</strong></div><div class="stat">Pending<strong id="pending">0</strong></div><div class="stat">Completed<strong id="completed">0</strong></div></div></div>
+   <div class="card"><div class="small">FINANCIAL OVERVIEW ♡</div><h2 style="margin-top:8px">Payment Summary</h2><div class="stats"><div class="stat">Total Omzet<strong id="turnover">Rp0</strong></div><div class="stat">Pembayaran Masuk<strong id="revenue">Rp0</strong></div><div class="stat">Sisa Tagihan<strong id="balance">Rp0</strong></div><div class="stat">Booking Lunas<strong id="paidCount">0</strong></div></div><p class="muted">Angka dihitung dari data booking Supabase (DP + pelunasan). Pengeluaran dan profit akan ditambahkan pada tahap berikutnya.</p></div>
+   <div class="card"><div class="row"><h2>Quick Actions ♡</h2><button class="btn secondary" id="dashboardRefresh">Refresh</button></div><div class="actions"><button class="btn" id="dashboardAdd">+ Add Booking</button><button class="btn secondary" id="dashboardView">View Bookings</button></div></div>
+  </section>
+  <section id="bookingsPage" class="page hidden">
+   <div class="card"><div class="section-heading"><div><div class="small">BOOKING MANAGEMENT ♡</div><h2 style="margin-top:7px">All Bookings</h2></div><button class="btn" id="showForm">+ Add Booking</button></div><input id="search" placeholder="Cari nama customer, layanan, atau tanggal..." aria-label="Cari booking"></div>
+   <section id="listSection" class="card"><div class="row"><h2>୨୧ Booking List</h2><button class="btn secondary" id="refresh">Refresh</button></div><div id="bookingList"><p class="muted">Memuat data...</p></div></section>
+   <section id="formSection" class="card hidden"><h2 id="formTitle">Add New Booking ♡</h2><form id="bookingForm"><label for="customer_name">Nama Customer</label><input id="customer_name" required><label for="customer_phone">Nomor WhatsApp</label><input id="customer_phone" type="tel"><label for="service_type">Jenis Layanan</label><select id="service_type"><option>Airport Transfer</option><option>Lombok Day Trip</option><option>Private Transport</option><option>Travel Companion</option><option>Custom Trip</option></select><label for="booking_date">Tanggal Perjalanan</label><input id="booking_date" type="date" required><label for="pickup_time">Jam Penjemputan</label><input id="pickup_time" type="time"><label for="pickup_location">Lokasi Penjemputan</label><input id="pickup_location"><label for="destination">Destinasi</label><textarea id="destination"></textarea><label for="total_price">Total Harga (Rp)</label><input id="total_price" type="number" min="0" value="0"><label for="down_payment">DP (Rp)</label><input id="down_payment" type="number" min="0" value="0"><label for="final_payment">💳 Pelunasan (Rp)</label><input id="final_payment" type="number" min="0" value="0"><label for="booking_status">Status Booking</label><select id="booking_status"><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><label for="notes">Catatan</label><textarea id="notes"></textarea><button class="btn full" type="submit">Save Booking ♡</button><button type="button" class="btn secondary full" id="cancelForm">Cancel</button></form></section>
+  </section>
+  <section id="calendarPage" class="page hidden"><div class="card"><h2>Trip Calendar ♡</h2><p class="note">Halaman kalender trip akan dibangun pada tahap berikutnya. Data booking tetap aman.</p></div></section>
+  <section id="customersPage" class="page hidden"><div class="card"><h2>Customer Database ♡</h2><p class="note">Profil dan riwayat customer akan ditambahkan setelah navigasi diuji.</p></div></section>
+  <section id="paymentsPage" class="page hidden"><div class="card"><h2>Payment History ♡</h2><p class="note">Riwayat transaksi terpisah akan ditambahkan pada tahap berikutnya. Ringkasan DP dan pelunasan saat ini ada di Dashboard dan Bookings.</p></div></section>
+  <section id="expensesPage" class="page hidden"><div class="card"><h2>Expenses ♡</h2><p class="note">Pencatatan pengeluaran per booking akan ditambahkan pada tahap berikutnya.</p></div></section>
+  <section id="reportsPage" class="page hidden"><div class="card"><h2>Monthly Reports ♡</h2><p class="note">Laporan bulanan dan profit akan ditambahkan setelah data pengeluaran tersedia.</p></div></section>
+  <section id="masterPage" class="page hidden"><div class="card"><h2>Master Data ♡</h2><p class="note">Pengaturan PIC, layanan, metode pembayaran, dan status akan ditambahkan kemudian.</p></div></section>
+ </main>
 </div>
-
-<div class="tabs">
-  <button class="btn" id="showBookings">Bookings</button>
-  <button class="btn secondary" id="showForm">+ Add Booking</button>
-</div>
-
-<section id="listSection" class="card">
-  <div class="row">
-    <h2>୨୧ Recent Bookings</h2>
-    <button class="btn secondary" id="refresh">Refresh</button>
-  </div>
-  <input id="search" placeholder="Cari nama customer...">
-  <div id="bookingList"><p class="muted">Memuat data...</p></div>
-</section>
-
-<section id="formSection" class="card hidden">
-  <h2 id="formTitle">Add New Booking ♡</h2>
-  <form id="bookingForm">
-    <label>Nama Customer</label>
-    <input id="customer_name" required>
-    <label>Nomor WhatsApp</label>
-    <input id="customer_phone" type="tel">
-    <label>Jenis Layanan</label>
-    <select id="service_type">
-      <option>Airport Transfer</option>
-      <option>Lombok Day Trip</option>
-      <option>Private Transport</option>
-      <option>Travel Companion</option>
-      <option>Custom Trip</option>
-    </select>
-    <label>Tanggal Perjalanan</label>
-    <input id="booking_date" type="date" required>
-    <label>Jam Penjemputan</label>
-    <input id="pickup_time" type="time">
-    <label>Lokasi Penjemputan</label>
-    <input id="pickup_location">
-    <label>Destinasi</label>
-    <textarea id="destination"></textarea>
-    <label>Total Harga (Rp)</label>
-    <input id="total_price" type="number" min="0" value="0">
-    <label>DP (Rp)</label>
-    <input id="down_payment" type="number" min="0" value="0">
-
-    
-<label>💳 Pelunasan (Rp)</label>
-<input id="final_payment" type="number" min="0" value="0">
-
-    <label>Status Booking</label>
-    <select id="booking_status">
-      <option value="pending">Pending</option>
-      <option value="confirmed">Confirmed</option>
-      <option value="completed">Completed</option>
-      <option value="cancelled">Cancelled</option>
-    </select>
-    <label>Catatan</label>
-    <textarea id="notes"></textarea>
-    <button class="btn full">Save Booking ♡</button>
-    <button type="button" class="btn secondary full" id="cancelForm">Cancel</button>
-  </form>
-</section>
-
-<div class="card">
-  <div class="small">PAYMENT SUMMARY ♡</div>
-  <h2 id="revenue">Rp0</h2>
-  <p class="muted">Total nilai pembayaran yang sudah diterima (DP)</p>
-</div>
-</main>
-
 <script>
-const SUPABASE_URL = "https://vuzypnimwlffsglxgoax.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Kq9FPojytTzXNXZ_rjBGTw__tAk5jZw";
-
-const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let editingId = null;
-let bookings = [];
-
-const $ = id => document.getElementById(id);
-const money = n => new Intl.NumberFormat("id-ID",{
-  style:"currency",currency:"IDR",maximumFractionDigits:0
-}).format(n || 0);
-
-function showApp(session){
-  $("login").classList.toggle("hidden",!!session);
-  $("app").classList.toggle("hidden",!session);
-  if(session) loadBookings();
-}
-
-async function loadBookings(){
-  $("bookingList").textContent="Memuat data...";
-  const {data,error}=await db.from("bookings")
-    .select("*").order("created_at",{ascending:false});
-  if(error){
-    $("bookingList").textContent="Gagal memuat: "+error.message;
-    return;
-  }
-  bookings=data||[];
-  $("total").textContent=bookings.length;
-  $("pending").textContent=bookings.filter(x=>x.booking_status==="pending").length;
-  $("completed").textContent=bookings.filter(x=>x.booking_status==="completed").length;
-  $("upcoming").textContent=bookings.filter(x=>
-    x.booking_date>=new Date().toLocaleDateString("en-CA") &&
-    ["pending","confirmed"].includes(x.booking_status)
-  ).length;
-  $("revenue").textContent=money(bookings.reduce((s,x)=>s+Number(x.down_payment||0),0));
-  renderBookings();
-}
-
-function renderBookings(){
-  const q=$("search").value.toLowerCase();
-  const list=bookings.filter(x=>(x.customer_name||"").toLowerCase().includes(q));
-  $("bookingList").replaceChildren();
-  if(!list.length){
-    $("bookingList").textContent="Belum ada booking ♡";
-    return;
-  }
-  list.forEach(x=>{
-    const card=document.createElement("div");
-    card.className="booking";
-    const top=document.createElement("div");
-    top.className="row";
-    const name=document.createElement("strong");
-    name.textContent=x.customer_name;
-    const badge=document.createElement("span");
-    badge.className="badge";
-    badge.textContent=x.booking_status;
-    top.append(name,badge);
-    const detail=document.createElement("p");
-    detail.className="muted";
-    detail.textContent=[x.service_type,x.booking_date,x.pickup_time].filter(Boolean).join(" · ");
-    
-const price=document.createElement("p");
-
-const total=Number(x.total_price)||0;
-const dp=Number(x.down_payment)||0;
-const pelunasan=Number(x.final_payment)||0;
-const sisa=Math.max(0,total-dp-pelunasan);
-
-const statusPembayaran=
-  sisa===0 ? "PAID ♡" :
-  dp+pelunasan>0 ? "PARTIAL PAYMENT" :
-  "UNPAID";
-
-price.style.lineHeight="1.9";
-price.textContent=
-  "💰 Total: "+money(total)+"\n"+
-  "💗 DP: "+money(dp)+"\n"+
-  "💳 Pelunasan: "+money(pelunasan)+"\n"+
-  "🧾 Sisa: "+money(sisa)+"\n"+
-  "✨ Status: "+statusPembayaran;
-
-price.style.whiteSpace="pre-line";
-
-    const actions=document.createElement("div");
-    actions.className="actions";
-    const edit=document.createElement("button");
-    edit.className="btn secondary";
-    edit.textContent="Edit";
-    edit.onclick=()=>editBooking(x);
-    const del=document.createElement("button");
-    del.className="btn danger";
-    del.textContent="Delete";
-    del.onclick=()=>deleteBooking(x.id);
-    actions.append(edit,del);
-    card.append(top,detail,price,actions);
-    $("bookingList").append(card);
-  });
-}
-
-function openForm(){
-  $("listSection").classList.add("hidden");
-  $("formSection").classList.remove("hidden");
-}
-function closeForm(){
-  $("formSection").classList.add("hidden");
-  $("listSection").classList.remove("hidden");
-  $("bookingForm").reset();
-  editingId=null;
-  $("formTitle").textContent="Add New Booking ♡";
-}
-
-function editBooking(x){
-  editingId=x.id;
-  ["customer_name","customer_phone","service_type","booking_date",
-   "pickup_time","pickup_location","destination","total_price",
-   "down_payment","final_payment","booking_status","notes"].forEach(k=>{
-     $(k).value=x[k]??"";
-   });
-  $("formTitle").textContent="Edit Booking ♡";
-  openForm();
-}
-
-
-$("loginForm").onsubmit=async e=>{
-  e.preventDefault();
-  $("loginMsg").textContent="Checking login...";
-  const {error}=await db.auth.signInWithPassword({
-    email:$("email").value,password:$("password").value
-  });
-  $("loginMsg").textContent=error?error.message:"Login berhasil ♡";
-};
-$("logout").onclick=async()=>{await db.auth.signOut();};
-$("showBookings").onclick=closeForm;
-$("showForm").onclick=()=>{
-  closeForm();
-  $("listSection").classList.add("hidden");
-  $("formSection").classList.remove("hidden");
-};
-$("cancelForm").onclick=closeForm;
-$("refresh").onclick=loadBookings;
-$("search").oninput=renderBookings;
-
-$("bookingForm").onsubmit=async e=>{
-  e.preventDefault();
- 
-const fields=["customer_name","customer_phone","service_type",
-  "booking_date","pickup_time","pickup_location","destination",
-  "total_price","down_payment","final_payment","booking_status","notes"];
-
-  const payload={};
-  fields.forEach(k=>{
-    const el=$(k);
-    payload[k]=el.type==="number"?(Number(el.value)||0):(el.value||null);
-  });
-  
-if(
-  Number(payload.down_payment || 0) +
-  Number(payload.final_payment || 0) >
-  Number(payload.total_price || 0)
-){
-  alert("Total DP dan pelunasan tidak boleh melebihi total harga.");
-  return;
-}
-
-  const result=editingId
-    ?await db.from("bookings").update(payload).eq("id",editingId)
-    :await db.from("bookings").insert(payload);
-  if(result.error){
-    alert("Gagal menyimpan: "+result.error.message);
-    return;
-  }
-  alert("Booking berhasil disimpan ♡");
-  closeForm();
-  loadBookings();
-};
-
-$("bookingForm").querySelector("button[type=submit]");
-
-db.auth.onAuthStateChange((_event,session)=>{
-  showApp(session);
-});
-db.auth.getSession().then(({data})=>showApp(data.session));
-async function deleteBooking(id){
-  const confirmDelete = confirm("Yakin ingin menghapus booking ini?");
-  if(!confirmDelete) return;
-
-  const {error} = await db
-    .from("bookings")
-    .delete()
-    .eq("id", id);
-
-  if(error){
-    alert("Gagal menghapus booking: " + error.message);
-    return;
-  }
-
-  alert("Booking berhasil dihapus ♡");
-  await loadBookings();
-}
+const SUPABASE_URL="https://vuzypnimwlffsglxgoax.supabase.co";
+const SUPABASE_KEY="sb_publishable_Kq9FPojytTzXNXZ_rjBGTw__tAk5jZw";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let editingId=null,bookings=[];
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const pageNames={dashboard:"Dashboard ♡",bookings:"Bookings ♡",calendar:"Trip Calendar ♡",customers:"Customers ♡",payments:"Payments ♡",expenses:"Expenses ♡",reports:"Monthly Reports ♡",master:"Master Data ♡"};
+function closeMenu(){$("sidebar").classList.remove("open");$("backdrop").classList.remove("open");$("menuToggle").setAttribute("aria-expanded","false")}
+function navigate(page){document.querySelectorAll(".page").forEach(el=>el.classList.add("hidden"));$(page+"Page").classList.remove("hidden");document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));$("pageTitle").textContent=pageNames[page];closeMenu();if(page==="bookings")closeForm()}
+document.querySelectorAll(".nav-btn").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
+$("menuToggle").onclick=()=>{const open=!$("sidebar").classList.contains("open");$("sidebar").classList.toggle("open",open);$("backdrop").classList.toggle("open",open);$("menuToggle").setAttribute("aria-expanded",String(open))};$("backdrop").onclick=closeMenu;
+function showApp(session){$("login").classList.toggle("hidden",!!session);$("app").classList.toggle("hidden",!session);if(session)loadBookings()}
+async function loadBookings(){ $("bookingList").textContent="Memuat data...";const {data,error}=await db.from("bookings").select("*").order("created_at",{ascending:false});if(error){$("bookingList").textContent="Gagal memuat: "+error.message;return}bookings=data||[];const today=new Date();const localToday=[today.getFullYear(),String(today.getMonth()+1).padStart(2,"0"),String(today.getDate()).padStart(2,"0")].join("-");$("total").textContent=bookings.length;$("pending").textContent=bookings.filter(x=>x.booking_status==="pending").length;$("completed").textContent=bookings.filter(x=>x.booking_status==="completed").length;$("upcoming").textContent=bookings.filter(x=>x.booking_date>=localToday&&["pending","confirmed"].includes(x.booking_status)).length;const total=bookings.reduce((s,x)=>s+Number(x.total_price||0),0);const received=bookings.reduce((s,x)=>s+Number(x.down_payment||0)+Number(x.final_payment||0),0);$("turnover").textContent=money(total);$("revenue").textContent=money(received);$("balance").textContent=money(Math.max(0,total-received));$("paidCount").textContent=bookings.filter(x=>Number(x.total_price||0)>0&&Number(x.down_payment||0)+Number(x.final_payment||0)>=Number(x.total_price||0)).length;renderBookings()}
+function paymentStatus(x){const total=Number(x.total_price)||0,paid=(Number(x.down_payment)||0)+(Number(x.final_payment)||0);return total>0&&paid>=total?"PAID ♡":paid>0?"PARTIAL PAYMENT":"UNPAID"}
+function makeAction(label,cls,handler){const b=document.createElement("button");b.className="btn "+cls;b.textContent=label;b.onclick=handler;return b}
+function renderBookings(){const q=$("search").value.trim().toLowerCase();const list=bookings.filter(x=>[x.customer_name,x.service_type,x.booking_date].some(v=>String(v||"").toLowerCase().includes(q)));$("bookingList").replaceChildren();if(!list.length){$("bookingList").textContent="Belum ada booking yang cocok ♡";return}
+const desktop=document.createElement("div");desktop.className="desktop-bookings table-wrap";const table=document.createElement("table");table.className="booking-table";const head=document.createElement("thead");const hr=document.createElement("tr");["Customer / Trip","Total","Pembayaran","Status","Action"].forEach(s=>{const th=document.createElement("th");th.textContent=s;hr.append(th)});head.append(hr);table.append(head);const tbody=document.createElement("tbody");const mobile=document.createElement("div");mobile.className="mobile-bookings";
+list.forEach(x=>{const total=Number(x.total_price)||0,dp=Number(x.down_payment)||0,final=Number(x.final_payment)||0,balance=Math.max(0,total-dp-final);const tr=document.createElement("tr");const cells=[`${x.customer_name||"-"}\n${[x.service_type,x.booking_date].filter(Boolean).join(" · ")}`,money(total),`DP ${money(dp)}\nPelunasan ${money(final)}\nSisa ${money(balance)}`,`${x.booking_status||"-"} · ${paymentStatus(x)}`];cells.forEach((v,i)=>{const td=document.createElement("td");td.textContent=v;td.style.whiteSpace="pre-line";if(i===0)td.style.fontWeight="600";tr.append(td)});const act=document.createElement("td");const buttons=document.createElement("div");buttons.className="actions";buttons.append(makeAction("Edit","secondary",()=>editBooking(x)),makeAction("Delete","danger",()=>deleteBooking(x.id)));act.append(buttons);tr.append(act);tbody.append(tr);
+const card=document.createElement("div");card.className="booking";const top=document.createElement("div");top.className="row";const name=document.createElement("strong");name.textContent=x.customer_name||"-";const badge=document.createElement("span");badge.className="badge";badge.textContent=x.booking_status||"-";top.append(name,badge);const detail=document.createElement("p");detail.className="muted";detail.textContent=[x.service_type,x.booking_date,x.pickup_time].filter(Boolean).join(" · ");const price=document.createElement("p");price.className="payment-line";price.textContent=`💰 Total: ${money(total)}\n💗 DP: ${money(dp)}\n💳 Pelunasan: ${money(final)}\n🧾 Sisa: ${money(balance)}\n✨ Status: ${paymentStatus(x)}`;const actions=document.createElement("div");actions.className="actions";actions.append(makeAction("Edit","secondary",()=>editBooking(x)),makeAction("Delete","danger",()=>deleteBooking(x.id)));card.append(top,detail,price,actions);mobile.append(card)});table.append(tbody);desktop.append(table);$("bookingList").append(desktop,mobile)}
+function openForm(){navigate("bookings");$("listSection").classList.add("hidden");$("formSection").classList.remove("hidden")}
+function closeForm(){$("formSection").classList.add("hidden");$("listSection").classList.remove("hidden");$("bookingForm").reset();editingId=null;$("formTitle").textContent="Add New Booking ♡"}
+function editBooking(x){openForm();editingId=x.id;["customer_name","customer_phone","service_type","booking_date","pickup_time","pickup_location","destination","total_price","down_payment","final_payment","booking_status","notes"].forEach(k=>{$(k).value=x[k]??""});$("formTitle").textContent="Edit Booking ♡"}
+$("loginForm").onsubmit=async e=>{e.preventDefault();$("loginMsg").textContent="Checking login...";const {error}=await db.auth.signInWithPassword({email:$("email").value,password:$("password").value});$("loginMsg").textContent=error?error.message:"Login berhasil ♡"};$("logout").onclick=async()=>{const {error}=await db.auth.signOut();if(error)alert(error.message)};
+$("showForm").onclick=()=>{closeForm();openForm()};$("cancelForm").onclick=closeForm;$("refresh").onclick=loadBookings;$("dashboardRefresh").onclick=loadBookings;$("dashboardAdd").onclick=()=>{closeForm();openForm()};$("dashboardView").onclick=()=>navigate("bookings");$("search").oninput=renderBookings;
+$("bookingForm").onsubmit=async e=>{e.preventDefault();const fields=["customer_name","customer_phone","service_type","booking_date","pickup_time","pickup_location","destination","total_price","down_payment","final_payment","booking_status","notes"];const payload={};fields.forEach(k=>{const el=$(k);payload[k]=el.type==="number"?(Number(el.value)||0):(el.value||null)});if(Number(payload.down_payment||0)+Number(payload.final_payment||0)>Number(payload.total_price||0)){alert("Total DP dan pelunasan tidak boleh melebihi total harga.");return}const result=editingId?await db.from("bookings").update(payload).eq("id",editingId):await db.from("bookings").insert(payload);if(result.error){alert("Gagal menyimpan: "+result.error.message);return}alert("Booking berhasil disimpan ♡");closeForm();await loadBookings()};
+async function deleteBooking(id){if(!confirm("Yakin ingin menghapus booking ini?"))return;const {error}=await db.from("bookings").delete().eq("id",id);if(error){alert("Gagal menghapus booking: "+error.message);return}alert("Booking berhasil dihapus ♡");await loadBookings()}
+let lastUserId=null;db.auth.onAuthStateChange((_event,session)=>{const userId=session?.user?.id||null;$("login").classList.toggle("hidden",!!session);$("app").classList.toggle("hidden",!session);if(userId&&userId!==lastUserId){lastUserId=userId;setTimeout(loadBookings,0)}if(!userId)lastUserId=null});db.auth.getSession().then(({data})=>{if(data.session){$("login").classList.add("hidden");$("app").classList.remove("hidden");loadBookings()}else{$("login").classList.remove("hidden");$("app").classList.add("hidden")}});
 </script>
 </body>
 </html>
-
